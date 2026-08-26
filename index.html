@@ -110,6 +110,13 @@
     .food-card:hover {
       background-color: #fce4ec;
     }
+
+    .food-card img.option-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -134,13 +141,18 @@
 
   <!-- STEP 3: Food Selection Screen -->
   <div class="card hidden" id="step3">
-    <h1>🍕 What are we eating? 🍗</h1>
+    <h1>🍕 What are we eating? 🍽️</h1>
     <div class="food-options">
       <div class="food-card" onclick="selectFood('Pizza 🍕')">
         <span>Pizza 🍕</span>
       </div>
       <div class="food-card" onclick="selectFood('Grilled Chicken 🍗')">
         <span>Grilled Chicken 🍗</span>
+      </div>
+      <div class="food-card" onclick="selectFood('You 😏❤️')">
+        <!-- Swap the comment below if using a photo instead of emoji -->
+        <!-- <img src="WhatsApp Image 2026-08-26 at 13.37.30.jpeg" class="option-thumb" alt="Me"> -->
+        <span>You 🙋🏻‍♂️❤️</span>
       </div>
     </div>
   </div>
