@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will you go on a date with me?</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #fce4ec;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: #fcf8f2;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #5c1827;
+      font-size: 22px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    p.subtext {
+      color: #7d5a62;
+      font-size: 14px;
+      margin-bottom: 25px;
+      font-style: italic;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      min-height: 50px;
+    }
+
+    button, .action-btn {
+      padding: 10px 24px;
+      font-size: 15px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .yes-btn {
+      background-color: #e88696;
+      color: white;
+    }
+
+    .yes-btn:hover {
+      background-color: #d96b7d;
+    }
+
+    #noBtn {
+      background-color: #bfa3c8;
+      color: white;
+      transition: left 0.15s ease-out, top 0.15s ease-out;
+      z-index: 999;
+    }
+
+    .food-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .food-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #f2d6dc;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #5c1827;
+      font-weight: bold;
+    }
+
+    .food-card:hover {
+      background-color: #fce4ec;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STEP 1: Proposal Screen -->
+  <div class="card" id="step1">
+    <img src="WhatsApp Image 2026-08-26 at 13.37.30.jpeg" alt="Cute pet" class="profile-img">
+    <h1>🌸 Will you go on a date with me? 🌸</h1>
+    <div class="btn-container">
+      <button class="yes-btn" id="yesBtn">YES ♥</button>
+      <button id="noBtn">no 🐾</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Surprise/Shock Screen -->
+  <div class="card hidden" id="step2">
+    <img src="vecteezy_dog-displays-shocked-expression-against-a-transparent_58175079.png" alt="Surprised Dog" class="profile-img">
+    <h1>WAIT YOU ACTUALLY SAID YES?? 😭</h1>
+    <p class="subtext">I was so ready for you to say no 😜</p>
+    <button class="yes-btn action-btn" id="nextBtn">okay okay! →</button>
+  </div>
+
+  <!-- STEP 3: Food Selection Screen -->
+  <div class="card hidden" id="step3">
+    <h1>🍕 What are we eating? 🍗</h1>
+    <div class="food-options">
+      <div class="food-card" onclick="selectFood('Pizza 🍕')">
+        <span>Pizza 🍕</span>
+      </div>
+      <div class="food-card" onclick="selectFood('Grilled Chicken 🍗')">
+        <span>Grilled Chicken 🍗</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+
+    let isEvading = false;
+    const distanceThreshold = 100;
+
+    document.addEventListener('mousemove', (e) => {
+      if (step1.classList.contains('hidden')) return;
+
+      const btnRect = noBtn.getBoundingClientRect();
+      const btnCenterX = btnRect.left + btnRect.width / 2;
+      const btnCenterY = btnRect.top + btnRect.height / 2;
+
+      const distanceX = e.clientX - btnCenterX;
+      const distanceY = e.clientY - btnCenterY;
+      const distance = Math.hypot(distanceX, distanceY);
+
+      if (distance < distanceThreshold) {
+        if (!isEvading) {
+          noBtn.style.position = 'fixed';
+          isEvading = true;
+        }
+
+        const angle = Math.atan2(distanceY, distanceX);
+        const pushDistance = (distanceThreshold - distance) * 1.5;
+
+        let newX = btnRect.left - Math.cos(angle) * pushDistance;
+        let newY = btnRect.top - Math.sin(angle) * pushDistance;
+
+        newX = Math.max(20, Math.min(window.innerWidth - btnRect.width - 20, newX));
+        newY = Math.max(20, Math.min(window.innerHeight - btnRect.height - 20, newY));
+
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+      }
+    });
+
+    yesBtn.addEventListener('click', () => {
+      step1.classList.add('hidden');
+      step2.classList.remove('hidden');
+    });
+
+    nextBtn.addEventListener('click', () => {
+      step2.classList.add('hidden');
+      step3.classList.remove('hidden');
+    });
+
+    function selectFood(choice) {
+      alert(`It's a date! We're having ${choice}! ❤️`);
+    }
+  </script>
+
+</body>
+</html>
